@@ -22,6 +22,8 @@ app.on('ready', function () {
         event.returnValue = 'hello'
     })
 
+    mainWindow.webContents.openDevTools()
+
     fs.readdir(testFolder, (err, files) => {
         files.forEach(file => {
             //fs.createReadStream(testFolder + '\\' + file).pipe(fs.createWriteStream(file + '.jpg'));

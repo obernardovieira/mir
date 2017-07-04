@@ -3,10 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <title>Hello World!</title>
+        <link rel="stylesheet" type="text/css" href="main.css"> 
+        <script>
+            function addSelected(element) {
+                alert(element)
+            }
+        </script>
     </head>
     <body>
         <h2>Your photos</h2>
-        <div id="imgsres"></div>
+        <div id="imgsres">
+            <table>
+                <tr>
+                    <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
+                    <td><img width="150" height="150" src="arcade.png" /></td>
+                    <td><img width="150" height="150" src="arcade.png" /></td>
+                </tr>
+            </table>
+        </div>
         <p id="sync-reply"></p>
         <input id="download-imgs" type="button" value="Download" />
 
