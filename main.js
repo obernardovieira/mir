@@ -8,6 +8,7 @@ const path = require('path')
 const url = require('url')
 const fs = require('fs')
 const os = require('os')
+const cheerio = require('cheerio')
 
 const testFolder = os.homedir() + '\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets\\';
 
@@ -17,20 +18,22 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
-
+    mainWindow = new BrowserWindow({ width: 800, height: 600 })
+    
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
   }))
-   
+
   fs.readdir(testFolder, (err, files) => {
       files.forEach(file => {
-          console.log(file);
+          //console.log(file);
+          fs.createReadStream(testFolder + '\\' + file).pipe(fs.createWriteStream(file + '.jpg'));
       });
   })
+
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -66,5 +69,15 @@ app.on('activate', function () {
   }
 })
 
+app.on('ready', () => {
+    // Register a 'CommandOrControl+Y' shortcut listener.
+    const $ = cheerio.load('<h2 class="title">Hello world</h2>')
+
+    $('h2.title').text('Hello there!')
+
+    $.html()
+
+    console.log('.|.')
+})
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
