@@ -1,17 +1,26 @@
 ﻿<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello World!</title>
+    </head>
+    <body>
+        <h2>Your photos</h2>
+        <div id="imgsres"></div>
+        <p id="sync-reply"></p>
+        <input id="download-imgs" type="button" value="Download" />
 
-      <h2 class="title">Hello world</h2>
+        <script>
+            const { ipcRenderer } = require('electron')
+            const updateOnlineStatus = () => {
+                //ipcRenderer.send('online-status-changed', navigator.onLine ? 'online' : 'offline')
+                document.getElementById('sync-reply').innerText = ipcRenderer.sendSync('online-status-changed', 'online')
+            }
 
-  </body>
+            window.addEventListener('online', updateOnlineStatus)
+            window.addEventListener('offline', updateOnlineStatus)
+
+            updateOnlineStatus()
+        </script>
+    </body>
 </html>
