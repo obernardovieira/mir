@@ -6,7 +6,12 @@
         <link rel="stylesheet" type="text/css" href="main.css"> 
         <script>
             function addSelected(element) {
-                alert(element)
+                if (element.parentElement.style.backgroundColor != "green") {
+                    element.parentElement.style.backgroundColor = "green";
+                }
+                else {
+                    element.parentElement.style.backgroundColor = "transparent";
+                }
             }
         </script>
     </head>
@@ -16,8 +21,8 @@
             <table>
                 <tr>
                     <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
-                    <td><img width="150" height="150" src="arcade.png" /></td>
-                    <td><img width="150" height="150" src="arcade.png" /></td>
+                    <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
+                    <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
                 </tr>
             </table>
         </div>
