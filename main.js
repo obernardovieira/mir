@@ -6,6 +6,7 @@ const fs = require('fs')
 const os = require('os')
 const testFolder = os.homedir() + '\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets\\';
 
+var tmpDirPhotos = '.tmpPhotos'
 let mainWindow
 
 app.on('ready', function () {
@@ -37,6 +38,7 @@ app.on('ready', function () {
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
+        fs.rmdirSync(tmpDirPhotos)
         app.quit()
     }
 })
@@ -48,6 +50,7 @@ app.on('activate', function () {
 })
 
 app.on('ready', () => {
-    console.log('.|.')
-    mainWindow.reload()
+    if (!fs.existsSync(tmpDirPhotos)) {
+        fs.mkdirSync()
+    }
 })
