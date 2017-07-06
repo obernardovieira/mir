@@ -7,6 +7,7 @@ const os = require('os')
 const testFolder = os.homedir() + '\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets\\';
 
 var tmpDirPhotos = '.tmpPhotos'
+let arrImages = []
 let mainWindow
 
 app.on('ready', function () {
@@ -18,19 +19,21 @@ app.on('ready', function () {
         slashes: true
     }))
 
-    ipcMain.on('online-status-changed', (event, status) => {
-        console.log(status)
-        event.returnValue = 'hello'
-    })
-
-    mainWindow.webContents.openDevTools()
-
     fs.readdir(testFolder, (err, files) => {
         files.forEach(file => {
             fs.createReadStream(testFolder + '\\' + file)
                 .pipe(fs.createWriteStream(tmpDirPhotos + '\\' + file + '.jpg'))
+            arrImages.push(file + '.jpg')
         })
+        console.log(arrImages[0])
     })
+
+    ipcMain.on('online-status-changed', (event, status) => {
+        console.log(status)
+        event.returnValue = arrImages
+    })
+
+    mainWindow.webContents.openDevTools()
 
     mainWindow.on('closed', function () {
         mainWindow = null

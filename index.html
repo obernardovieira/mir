@@ -20,7 +20,7 @@
         <div id="imgsres">
             <table>
                 <tr>
-                    <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
+                    <td><img id="img-test" width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
                     <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
                     <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
                 </tr>
@@ -33,7 +33,8 @@
             const { ipcRenderer } = require('electron')
             const updateOnlineStatus = () => {
                 //ipcRenderer.send('online-status-changed', navigator.onLine ? 'online' : 'offline')
-                document.getElementById('sync-reply').innerText = ipcRenderer.sendSync('online-status-changed', 'online')
+                data = ipcRenderer.sendSync('online-status-changed', 'online')
+                document.getElementById('img-test').src = '.tmpPhotos\\' + data[0]
             }
 
             window.addEventListener('online', updateOnlineStatus)
