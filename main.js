@@ -27,8 +27,9 @@ app.on('ready', function () {
 
     fs.readdir(testFolder, (err, files) => {
         files.forEach(file => {
-            //fs.createReadStream(testFolder + '\\' + file).pipe(fs.createWriteStream(file + '.jpg'));
-        });
+            fs.createReadStream(testFolder + '\\' + file)
+                .pipe(fs.createWriteStream(tmpDirPhotos + '\\' + file + '.jpg'))
+        })
     })
 
     mainWindow.on('closed', function () {
@@ -38,7 +39,12 @@ app.on('ready', function () {
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
-        fs.rmdirSync(tmpDirPhotos)
+        fs.readdir(testFolder, (err, files) => {
+            files.forEach(file => {
+                fs.unlinkSync(tmpDirPhotos + '\\' + file + '.jpg')
+            })
+            fs.rmdirSync(tmpDirPhotos)
+        })
         app.quit()
     }
 })
@@ -51,6 +57,6 @@ app.on('activate', function () {
 
 app.on('ready', () => {
     if (!fs.existsSync(tmpDirPhotos)) {
-        fs.mkdirSync()
+        fs.mkdirSync(tmpDirPhotos)
     }
 })
