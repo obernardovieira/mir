@@ -4,14 +4,16 @@ const path = require('path')
 const url = require('url')
 const fs = require('fs')
 const os = require('os')
+var tableify = require('tableify');
 const testFolder = os.homedir() + '\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets\\';
 
 var tmpDirPhotos = '.tmpPhotos'
-let arrImages = []
 let mainWindow
+var html
+var nPhotos = 0
 
 app.on('ready', function () {
-    mainWindow = new BrowserWindow({ width: 800, height: 600 })
+    mainWindow = new BrowserWindow({ width: 860, height: 600 })
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
@@ -19,18 +21,22 @@ app.on('ready', function () {
         slashes: true
     }))
 
+    html = '<table><tr>'
     fs.readdir(testFolder, (err, files) => {
         files.forEach(file => {
             fs.createReadStream(testFolder + '\\' + file)
                 .pipe(fs.createWriteStream(tmpDirPhotos + '\\' + file + '.jpg'))
-            arrImages.push(file + '.jpg')
+            if (nPhotos++ % 5 == 0) {
+                html += '</tr><tr>'
+            }
+            html += '<td><img width="150" height="150" src="' + tmpDirPhotos + '\\' + file + '.jpg" onclick="addSelected(this)" /></td>'
         })
-        console.log(arrImages[0])
+        html += '</tr></table>'
     })
 
     ipcMain.on('online-status-changed', (event, status) => {
         console.log(status)
-        event.returnValue = arrImages
+        event.returnValue = html
     })
 
     mainWindow.webContents.openDevTools()
