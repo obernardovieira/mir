@@ -35,7 +35,7 @@ app.on('ready', function () {
         html += '</tr></table>'
     })
 
-    ipcMain.on('online-status-changed', (event, status) => {
+    ipcMain.on('load-photos', (event, status) => {
         console.log(status)
         event.returnValue = html
     })
@@ -48,10 +48,9 @@ app.on('ready', function () {
             fs.createReadStream(tmpDirPhotos + '\\' + path.basename(status[i]))
                 .pipe(fs.createWriteStream(paths[0] + '\\' + path.basename(status[i])))
         }
+        mainWindow.reload();
     })
-
-    mainWindow.webContents.openDevTools()
-
+    //mainWindow.webContents.openDevTools()
     mainWindow.on('closed', function () {
         mainWindow = null
     })

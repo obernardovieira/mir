@@ -13,43 +13,34 @@
                 }
                 else {
                     element.parentElement.style.backgroundColor = "transparent";
+                    var i
+                    for (i = 0; i < toDown.length; i++) {
+                        if (toDown[i] == element.src) {
+                            delete toDown[i]
+                        }
+                    }
                 }
             }
         </script>
     </head>
     <body>
         <h2>Your photos</h2>
-        <div id="imgsres">
-            <!--<table>
-                <tr>
-                    <td><img id="img-test" width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
-                    <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
-                    <td><img width="150" height="150" src="arcade.png" onclick="addSelected(this)" /></td>
-                </tr>
-            </table>-->
-        </div>
+        <div id="imgsres"></div>
         <p id="sync-reply"></p>
         <input id="download-imgs" type="button" value="Download" />
 
         <script>
             const { ipcRenderer } = require('electron')
-            const updateOnlineStatus = () => {
-                //ipcRenderer.send('online-status-changed', navigator.onLine ? 'online' : 'offline')
-                data = ipcRenderer.sendSync('online-status-changed', 'online')
-                document.getElementById('imgsres').innerHTML = data //.src = '.tmpPhotos\\' + data[0]
+            const requestPhotos = () => {
+                data = ipcRenderer.sendSync('load-photos')
+                document.getElementById('imgsres').innerHTML = data
             }
-
-
             const sendDownloadPhotos = () => {
                 ipcRenderer.sendSync('download-photos', toDown)
             }
-            document.getElementById("download-imgs").addEventListener("click", sendDownloadPhotos); 
 
-
-            window.addEventListener('online', updateOnlineStatus)
-            window.addEventListener('offline', updateOnlineStatus)
-
-            updateOnlineStatus()
+            document.getElementById("download-imgs").addEventListener("click", sendDownloadPhotos)
+            requestPhotos()
         </script>
     </body>
 </html>
