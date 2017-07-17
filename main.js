@@ -6,6 +6,7 @@ const fs = require('fs')
 const os = require('os')
 var tableify = require('tableify');
 const testFolder = os.homedir() + '\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets\\';
+const dialog = require('electron').dialog
 
 var tmpDirPhotos = '.tmpPhotos'
 let mainWindow
@@ -37,6 +38,16 @@ app.on('ready', function () {
     ipcMain.on('online-status-changed', (event, status) => {
         console.log(status)
         event.returnValue = html
+    })
+    ipcMain.on('download-photos', (event, status) => {
+        var paths = dialog.showOpenDialog(mainWindow, {
+            properties: ['openDirectory']
+        })
+        var i
+        for (i = 0; i < status.length; i++) {
+            fs.createReadStream(tmpDirPhotos + '\\' + path.basename(status[i]))
+                .pipe(fs.createWriteStream(paths[0] + '\\' + path.basename(status[i])))
+        }
     })
 
     mainWindow.webContents.openDevTools()
