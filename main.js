@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, Menu, BrowserWindow, ipcMain } = require('electron')
 
 const path = require('path')
 const url = require('url')
@@ -14,6 +14,52 @@ let mainWindow
 var html
 var nPhotos = 0
 
+const template = [
+    {
+        label: 'Opcoes',
+        submenu: [
+            {
+                label: 'Descarregar',
+                accelerator: 'CmdOrCtrl+D',
+                click() { downloadSelected() }
+            },
+            { type: 'separator' },
+            {
+                label: 'Selecao',
+                submenu: [
+                    {
+                        label: 'Marcar todas',
+                        accelerator: 'CmdOrCtrl+A',
+                        click() { selectAll() }
+                    },
+                    {
+                        label: 'Desmarcar todas',
+                        click() { unselectAll() }
+                    }
+                ]
+            },
+            { type: 'separator' },
+            { label: 'Recarregar', role: 'reload' },
+            { label: 'Ecra completo', role: 'togglefullscreen' }
+        ]
+    },
+    { label: 'Sair', role: 'quit' }
+]
+
+function downloadSelected()
+{
+
+}
+
+function selectAll()
+{
+
+}
+
+function unselectAll()
+{
+
+}
 
 app.on('ready', function () {
     mainWindow = new BrowserWindow({ width: 860, height: 600 })
@@ -23,6 +69,9 @@ app.on('ready', function () {
         protocol: 'file:',
         slashes: true
     }))
+
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
 
     html = '<table><tr>'
     fs.readdir(originFolder, (err, files) => {
