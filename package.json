@@ -1,24 +1,23 @@
 {
-  "name": "electron-quick-start",
+  "name": "mir",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Save login screen images",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/obernardovieira/mir",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "mir",
+    "login",
+    "screen",
+    "images"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "obernardovieira",
+  "license": "GPLv3",
   "devDependencies": {
     "electron": "~1.6.2",
     "cheerio": "~1.0.0-rc.2",
-    "image-size" : "~0.6.1"
+    "image-size": "~0.6.1"
   }
 }
