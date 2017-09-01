@@ -19,6 +19,6 @@
   "devDependencies": {
     "electron": "~1.6.2",
     "cheerio": "~1.0.0-rc.2",
-    "tableify": "~1.0.1"
+    "image-size" : "~0.6.1"
   }
 }

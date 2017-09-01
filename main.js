@@ -4,14 +4,16 @@ const path = require('path')
 const url = require('url')
 const fs = require('fs')
 const os = require('os')
-var tableify = require('tableify');
-const testFolder = os.homedir() + '\\AppData\\Local\\Packages\\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets\\';
+var sizeOf = require('image-size')
+const originFolder = os.homedir() + '\\AppData\\Local\\Packages\\' +
+    'Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\\LocalState\\Assets\\';
 const dialog = require('electron').dialog
 
 var tmpDirPhotos = '.tmpPhotos'
 let mainWindow
 var html
 var nPhotos = 0
+
 
 app.on('ready', function () {
     mainWindow = new BrowserWindow({ width: 860, height: 600 })
@@ -23,14 +25,19 @@ app.on('ready', function () {
     }))
 
     html = '<table><tr>'
-    fs.readdir(testFolder, (err, files) => {
+    fs.readdir(originFolder, (err, files) => {
         files.forEach(file => {
-            fs.createReadStream(testFolder + '\\' + file)
-                .pipe(fs.createWriteStream(tmpDirPhotos + '\\' + file + '.jpg'))
-            if (nPhotos++ % 5 == 0) {
-                html += '</tr><tr>'
+            var dimensions = sizeOf(originFolder + '\\' + file)
+            if (dimensions.width > dimensions.height)
+            {
+                fs.createReadStream(originFolder + '\\' + file)
+                    .pipe(fs.createWriteStream(tmpDirPhotos + '\\' + file + '.jpg'))
+                if (nPhotos++ % 5 == 0) {
+                    html += '</tr><tr>'
+                }
+                html += '<td><img width="150" height="150" src="' + tmpDirPhotos +
+                    '\\' + file + '.jpg" onclick="addSelected(this)" /></td>'
             }
-            html += '<td><img width="150" height="150" src="' + tmpDirPhotos + '\\' + file + '.jpg" onclick="addSelected(this)" /></td>'
         })
         html += '</tr></table>'
     })
@@ -58,9 +65,9 @@ app.on('ready', function () {
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
-        fs.readdir(testFolder, (err, files) => {
+        fs.readdir(tmpDirPhotos, (err, files) => {
             files.forEach(file => {
-                fs.unlinkSync(tmpDirPhotos + '\\' + file + '.jpg')
+                fs.unlinkSync(tmpDirPhotos + '\\' + file)
             })
             fs.rmdirSync(tmpDirPhotos)
         })
